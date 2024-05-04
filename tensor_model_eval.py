@@ -16,6 +16,7 @@ class mlp_net(nn.Module):
 
         # 損失関数と活性化関数を定義する
         self.criterion = nn.MSELoss()
+        # self.optimizer = optim.Adam(self.parameters(), lr = 0.01)
         self.optimizer = optim.Adam(self.parameters())
 
     def forward(self, x):
