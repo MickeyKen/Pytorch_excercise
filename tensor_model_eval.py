@@ -67,6 +67,27 @@ def train(model, train_loader):
 
     return accuracy, loss
 
+def test(model, data_loader):
+    # 評価モードにする
+    model.eval()
+
+    total_data_len = 0
+    total_correct = 0
+
+    for batch_imgs, batch_labels in data_loader:
+        outputs = model(batch_imgs.reshape(-1,28*28*1))
+
+        _,pred_labels = torch.max(outputs, axis = 1)
+        batch_size = len(pred_labels)
+        for i in range(batch_size):
+            total_data_len += 1
+            if pred_labels[i] == batch_labels[i]:
+                total_correct += 1
+
+    acc = 100.0 * total_correct / total_data_len
+    return acc
+
+
 
 # テストデータの読み込み
 trainset = torchvision.datasets.MNIST(root='./data', 
@@ -91,3 +112,6 @@ model = mlp_net()
 
 acc, loss = train(model, train_loader)
 print(f"正解率: {acc}, 損失: {loss}")
+
+test_acc = test(model, test_loader)
+print(test_acc)
